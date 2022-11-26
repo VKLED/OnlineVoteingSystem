@@ -61,7 +61,7 @@ const registerFn = function(){
                     sessionStorage.setItem("username",user.value);
                     sessionStorage.setItem("password",passwd.value);
                     clear();
-                    location.href=location.href='../html/homePage.html';
+                    location.replace('./html/homePage.html');;
                     // console.log(JSON.parse(xhr.response));
                 } else{
                     regErrorFn('Please try later!');

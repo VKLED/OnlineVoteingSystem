@@ -56,7 +56,7 @@ memu_viewVote.addEventListener('click',function(e) {
 //sign out
 const signout=document.querySelector('#signout');
 signout.addEventListener('click',function(e) {
-    location.href='../html/loginPage.html';
+    location.replace("../index.html")
     localStorage.clear()
     sessionStorage.clear()
     history.pushState(null, null, document.URL);

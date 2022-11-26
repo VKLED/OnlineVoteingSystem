@@ -43,7 +43,7 @@ var loginFn = function(user,passwd){
                     loginContent.querySelector(".errorMsg").style.display = "none";
                     sessionStorage.setItem("username",user.value);
                     sessionStorage.setItem("password",passwd.value);
-                    location.href=location.href='../html/homePage.html';
+                    location.replace('./html/homePage.html');
                     // console.log(JSON.parse(xhr.response).body);
                 } else if(statusCode === 401){
                     errorFn('NO AUTHENTICATION!');
