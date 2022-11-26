@@ -56,13 +56,13 @@ memu_viewVote.addEventListener('click',function(e) {
 //sign out
 const signout=document.querySelector('#signout');
 signout.addEventListener('click',function(e) {
-    location.replace("../index.html")
-    localStorage.clear()
-    sessionStorage.clear()
-    history.pushState(null, null, document.URL);
-    window.addEventListener("popstate",function(e) {  
-        history.pushState(null, null, document.URL);
-    }, false);
+    localStorage.clear();
+    sessionStorage.clear();
+    // history.pushState(null, null, document.URL);
+    // window.addEventListener("popstate",function(e) {  
+    //     history.pushState(null, null, document.URL);
+    // }, false);
+    location.replace('../index.html');
 })
 
 

@@ -1,1 +1,0 @@
-window.location.href = './html/loginPage.html';
