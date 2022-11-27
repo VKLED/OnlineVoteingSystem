@@ -27,7 +27,7 @@ var loginFn = function(user,passwd){
     }
 
     const xhr=new XMLHttpRequest();
-    xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/test/login");
+    xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/dev/login");
     var content={"type":"login","user":user.value,"password":passwd.value};
     xhr.send(JSON.stringify(content));
 

@@ -45,7 +45,7 @@ const registerFn = function(){
     }
 
     const xhr=new XMLHttpRequest();
-    xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/test/login");
+    xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/dev/login");
     var content={"type":"register","user":user.value,"password":passwd.value};
     xhr.send(JSON.stringify(content));
 
@@ -61,9 +61,11 @@ const registerFn = function(){
                     sessionStorage.setItem("username",user.value);
                     sessionStorage.setItem("password",passwd.value);
                     clear();
-                    location.replace('./html/homePage.html');;
+                    location.replace('./html/homePage.html');
                     // console.log(JSON.parse(xhr.response));
-                } else{
+                } else if (statusCode === 401){
+                    regErrorFn('Username has been used!');
+                } else {
                     regErrorFn('Please try later!');
                 }
             }else{
