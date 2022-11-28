@@ -141,6 +141,8 @@ document.querySelector('#createVote_addOption').addEventListener('click', functi
         var newOption = document.createElement('input');
         newOption.placeholder = 'Please enter an option';
         optionLines.appendChild(newOption);
+    }else{
+        alert('The number of options must be smaller than 6');
     }
 })
 
@@ -149,6 +151,8 @@ document.querySelector('#createVote_deleteOption').addEventListener('click',func
     var optionLines = document.querySelector('#createVote_optionLines');
     if (optionLines.children.length > 2){
         optionLines.removeChild(optionLines.lastChild);
+    }else{
+        alert('The number of options, at least 2');
     }
 })
 
@@ -236,7 +240,7 @@ document.querySelector('#createVoteContent').children[2].addEventListener('click
                     openViewPage(request);
                 }else{
                     console.log(JSON.parse(xhr.response));
-                    alert("Network Error! Please try later.");
+                    alert("Vote name is already in use!");
                 }
             } else{
                 alert("Network Error!")
