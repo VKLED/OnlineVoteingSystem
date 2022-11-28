@@ -4,7 +4,7 @@ from boto3.dynamodb.conditions import Key
 
 def lambda_handler(event, content):
     dynamodb = boto3.resource('dynamodb', region_name=('us-west-2'))
-    response = {'stateCode': 200}
+    response = {'statusCode': 200}
     table = dynamodb.Table('userList')
     
     user = table.get_item(
@@ -16,11 +16,11 @@ def lambda_handler(event, content):
     if event['type'] == 'login':
         # login
         if 'Item' not in user or user['Item']['password'] != event['password']:
-            response['stateCode'] = 401 
+            response['statusCode'] = 401 
     else:
         # register
         if 'Item' in user:
-            response['stateCode'] = 401
+            response['statusCode'] = 401
         else:
             table.put_item(
                 Item = {
@@ -32,6 +32,6 @@ def lambda_handler(event, content):
             check = table.query(
                 KeyConditionExpression = Key('username').eq(event['user'])
                 )
-            if 'Items' not in check:
-                response["stateCode"] = 400;
+            if check['Items']==[]:
+                response["statusCode"] = 400
     return response

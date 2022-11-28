@@ -32,7 +32,7 @@ var loginFn = function(user,passwd){
     xhr.send(JSON.stringify(content));
 
     xhr.onerror=function(){
-        alert("Network Error!");
+        alert("Send request failed!");
     }
 
     xhr.onreadystatechange = function() {
@@ -41,8 +41,8 @@ var loginFn = function(user,passwd){
                 var statusCode=JSON.parse(xhr.response).statusCode;
                 if (statusCode === 200){
                     loginContent.querySelector(".errorMsg").style.display = "none";
-                    sessionStorage.setItem("username",user.value);
-                    sessionStorage.setItem("password",passwd.value);
+                    localStorage.setItem("username",user.value);
+                    localStorage.setItem("password",passwd.value);
                     location.replace('./html/homePage.html');
                     // console.log(JSON.parse(xhr.response).body);
                 } else if(statusCode === 401){

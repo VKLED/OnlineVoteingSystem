@@ -58,8 +58,8 @@ const registerFn = function(){
             if(xhr.status >= 200 && xhr.status < 300){
                 var statusCode=JSON.parse(xhr.response).statusCode;
                 if (statusCode === 200){
-                    sessionStorage.setItem("username",user.value);
-                    sessionStorage.setItem("password",passwd.value);
+                    localStorage.setItem("username",user.value);
+                    localStorage.setItem("password",passwd.value);
                     clear();
                     location.replace('./html/homePage.html');
                     // console.log(JSON.parse(xhr.response));
