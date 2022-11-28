@@ -33,7 +33,7 @@ def lambda_handler(event, content):
     body["voters"] = item0["voters"]
     body["options"] = []
     
-    for i in range(1, int(item0["voters"])+1):
+    for i in range(1, int(item["optionNum"])+1):
         body["options"].append(item["option"+str(i)])
 
     response["body"] = body

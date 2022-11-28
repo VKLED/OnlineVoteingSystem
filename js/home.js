@@ -168,6 +168,10 @@ var openViewPage = function(msg){
     document.querySelector('#attendVote').style.display = 'block';
 
     // options
+    let attendVoteOptions = document.querySelector('#attendVote').children[0];
+    while(attendVoteOptions.children.length>2){
+        attendVoteOptions.removeChild(attendVoteOptions.lastChild);
+    }
     var voteOptions = document.getElementsByClassName("attendVoteOption");
     for (let i=0; i<msg["options"].length; i++){
         if (i<2){
@@ -254,6 +258,9 @@ var viewVoteResults = function(option_results,type){
     document.querySelector('#voteResults').style.display = 'block';
 
     var results = document.querySelector('#voteResults');
+    while(results.children.length>2){
+        results.removeChild(results.lastChild);
+    }
     var attendVoteOption = document.getElementsByClassName('attendVoteOption')
     for (var i=0; i<option_results.length; i++){
         let node;
