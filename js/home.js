@@ -45,6 +45,13 @@ memu_createVote.addEventListener('click',function(e) {
     openVoteBlock.style.display = 'none';
     createVoteBlock.style.display = "block";
     viewVotesBlock.style.display = "none";
+
+    // set everything default
+    document.querySelector('#createVote_defaultImage').style.backgroundImage = "url('../images/bg1.jpg')";
+    let createVote_optionLines = document.querySelector('#createVote_optionLines');
+    while(createVote_optionLines.children.length>2){
+        createVote_optionLines.removeChild(createVote_optionLines.lastChild);
+    }
     let createvote=document.querySelector('#createVoteContent').getElementsByTagName('input');
     for(let i = 0; i<createvote.length; i++){
         createvote[i].value = '';
@@ -72,7 +79,7 @@ var buildVoteCard = function(votecards){
 
 //view
 memu_viewVote.addEventListener('click',function(e) {
-    let request = {"sponsor":localStorage.getItem('username')};
+    let request = {"sponsor":"all"};
 
     // send request
     xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/dev/home/view_votes");
@@ -190,7 +197,7 @@ document.querySelector('#createVoteContent').children[2].addEventListener('click
     const request={"type":"createVote"}
     request["pic"] = document.querySelector('#createVote_defaultImage').style.backgroundImage.charAt(17);
     var date= new Date();
-    request["date"] = date.getFullYear()+"-"+date.getMonth()+"-"+date.getDate();
+    request["date"] = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
     request["sponsor"] = localStorage.getItem('username');
     var vote_title = document.querySelector('#createVote_title').getElementsByTagName('input')[0].value;
     if (vote_title === ''){
@@ -400,17 +407,89 @@ document.querySelector('#votesCardBox').addEventListener('click', function(){
 /* 
     dashboard control
 */
-document.querySelector('#dashBoardButton').addEventListener('click',function(e){
-    // apply user msg
 
+// view button to see all the votes that user created
+var buildVoteTable = function(votecard){
     document.querySelector('#dashBoardViewVotes').style.display = 'block';
-})
+    let dashboardViewTable = document.querySelector('#dashBoardViewTable').children[0];
 
-var dashBoardSelect = document.getElementsByClassName('dashBoardViewSelected')
-for (let i = 0; i < dashBoardSelect.length; i++){
-    dashBoardSelect[i].onclick = function(){
-        dashboardBlock.style.display="none";
-        openVoteBlock.style.display = 'block';
-        //open vote page, give value
+    // set default first
+    while(dashboardViewTable.children.length>2){
+        dashboardViewTable.removeChild(dashboardViewTable.lastChild);
+    }
+    
+    // add newline
+    for(let i=0;i<votecard.length;i++){
+        if (votecard[i]["title"] === "Welcome to vote!"){continue;}
+        let newline = dashboardViewTable.children[1].cloneNode(true);
+        newline.children[0].innerHTML = votecard[i]["title"];
+        newline.children[1].innerHTML = votecard[i]["date"];
+        newline.children[2].innerHTML = votecard[i]["voters"];
+        dashboardViewTable.appendChild(newline);
     }
 }
+
+document.querySelector('#dashBoardButton').addEventListener('click',function(e){
+    // apply user msg
+    let request = {"sponsor":localStorage.getItem('username')};
+
+    // send request
+    xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/dev/home/view_votes");
+    xhr.send(JSON.stringify(request));
+
+    xhr.onerror=function(){
+        alert("Send request failed!");
+        return;
+    }
+
+    // response
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState === 4){
+            if(xhr.status >= 200 && xhr.status < 300){
+                var response = JSON.parse(xhr.response);
+                if (response.statusCode === 200){
+                    buildVoteTable(response.body);
+                }else{
+                    alert("View votes failed!");
+                }
+            }else{
+                alert("Network Error!");
+            }
+        }
+    }
+})
+
+// open a vote to see the details  
+document.getElementById("dashBoardViewTable").addEventListener("click",function(){
+    let dashBoardSelect = document.getElementsByClassName('dashBoardViewSelected')
+    for (let i = 0; i < dashBoardSelect.length; i++){
+        dashBoardSelect[i].onclick = function(){
+            let request = {"vote_title": dashBoardSelect[i].children[0].innerHTML};
+            // send request
+            xhr.open("POST","https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/dev/home/votecard");
+            xhr.send(JSON.stringify(request));
+    
+            xhr.onerror=function(){
+                alert("Send request failed!");
+                return;
+            }
+    
+            // response
+            xhr.onreadystatechange=function(){
+                if(xhr.readyState === 4){                    
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        var response = JSON.parse(xhr.response);
+                        if (response.statusCode === 200){
+                            openViewPage(response.body);
+                        }else{
+                            alert("Open voteCard failed!");
+                        }
+                    }else{
+                        alert("Network Error!");
+                    }
+                }
+            }
+        }
+    }
+
+})

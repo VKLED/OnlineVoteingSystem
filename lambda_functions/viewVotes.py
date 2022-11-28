@@ -13,9 +13,13 @@ def lambda_handler(event, content):
     votesList = dynamodb.Table('votesList')
     
     # sacn voteOptionList
-    item = votesList.scan(
-        #FilterExpression= Key('sponsor').eq(event["sponsor"])
-        )
+    if event["sponsor"] == 'all':
+        item = votesList.scan(
+            )
+    else:
+        item = votesList.scan(
+            FilterExpression= Key('sponsor').eq(event["sponsor"])
+            )
     
     response["body"] = item["Items"]
     return response
