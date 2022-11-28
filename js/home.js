@@ -193,6 +193,13 @@ var openViewPage = function(msg){
             voteOptions[0].parentNode.appendChild(newOptionNode);
         }
     }
+
+    // delete button
+    if (localStorage.getItem('username') === msg["sponsor"]){
+        document.querySelector('#deleteVote').style.display = 'block';
+    }else{
+        document.querySelector('#deleteVote').style.display = 'none';
+    }
 }
 
 //submit to create a new vote
@@ -249,7 +256,46 @@ document.querySelector('#createVoteContent').children[2].addEventListener('click
     }
 })
 
+// delete a vote
+document.querySelector("#deleteVote").addEventListener("click",function(){
+    let button = document.querySelector("#deleteVote").children[0];
+    if (button.innerHTML === 'Delete'){
+        // first time
+        button.innerHTML = "Delete?";
+        button.style.color = 'red';
+    }else{
+        // second time
+        request = {"vote_title": document.querySelector("#voteDetails").children[0].children[1].innerHTML};
+        request["date"] = document.querySelector("#voteDetails").children[2].children[1].innerHTML;
+        request["optionNum"] = document.getElementsByClassName("voteResultLine").length;
 
+        // send request
+        xhr.open('POST', "https://1yxu04j3pf.execute-api.us-west-2.amazonaws.com/dev/home/delete_vote");
+        xhr.send(JSON.stringify(request));
+
+        xhr.onerror=function(){
+            alert("Send request failed!");
+            return;
+        }
+
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4){
+                if(xhr.status >= 200 && xhr.status < 300){
+                    let response = JSON.parse(xhr.response);
+                    if (response.statusCode === "200"){
+                        openVoteBlock.style.display = "none";
+                    }else{
+                        alert("Delete Vote Failed!");
+                    }
+                }else{
+                    alert("Network Error!");
+                }
+            }
+        }
+        button.innerHTML = "Delete";
+        button.style.color = "white";
+    }
+})
 
 
 /* 
